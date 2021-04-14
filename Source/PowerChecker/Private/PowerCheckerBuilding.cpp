@@ -2,6 +2,7 @@
 #include "PowerCheckerModule.h"
 #include "PowerCheckerRCO.h"
 #include "Util/Logging.h"
+#include "Util/Optimize.h"
 
 #include "FGCharacterPlayer.h"
 #include "FGPowerCircuit.h"

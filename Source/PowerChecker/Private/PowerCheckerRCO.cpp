@@ -1,5 +1,6 @@
 ﻿#include "PowerCheckerRCO.h"
 #include "PowerCheckerBuilding.h"
+#include "Util/Optimize.h"
 
 #include "FGPlayerController.h"
 

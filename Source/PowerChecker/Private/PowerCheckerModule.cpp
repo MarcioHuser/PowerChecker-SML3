@@ -1,9 +1,9 @@
 ﻿#include "PowerCheckerModule.h"
-
-#include "FGCircuitSubsystem.h"
 #include "PowerCheckerBuilding.h"
 #include "util/Logging.h"
+#include "Util/Optimize.h"
 
+#include "FGCircuitSubsystem.h"
 #include "FGPowerCircuit.h"
 #include "FGPowerInfoComponent.h"
 #include "Buildables/FGBuildableFrackingActivator.h"

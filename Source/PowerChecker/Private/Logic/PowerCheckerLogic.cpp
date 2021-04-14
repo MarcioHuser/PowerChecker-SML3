@@ -1,6 +1,7 @@
 ﻿#include "Logic/PowerCheckerLogic.h"
 #include "PowerCheckerModule.h"
 #include "PowerCheckerRCO.h"
+#include "Util/Optimize.h"
 
 #include "Buildables/FGBuildablePowerPole.h"
 #include "FGCircuitSubsystem.h"
