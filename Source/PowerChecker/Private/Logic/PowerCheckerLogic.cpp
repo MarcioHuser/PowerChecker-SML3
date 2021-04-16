@@ -1,6 +1,7 @@
 ﻿#include "Logic/PowerCheckerLogic.h"
 #include "PowerCheckerModule.h"
 #include "PowerCheckerRCO.h"
+#include "Util/Logging.h"
 #include "Util/Optimize.h"
 
 #include "Buildables/FGBuildablePowerPole.h"
@@ -21,7 +22,6 @@
 
 #include "Buildables/FGBuildableGenerator.h"
 #include "Buildables/FGBuildablePowerStorage.h"
-#include "Util/Logging.h"
 
 #ifndef OPTIMIZE
 #pragma optimize( "", off )
@@ -115,8 +115,8 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 	bool includeOutOfFuel,
 	bool includePowerDetails,
 	TArray<FPowerDetail>& outGeneratorDetails,
-    TArray<FPowerDetail>& outPowerStorageDetails,
-    TArray<FPowerDetail>& outConsumerDetails,
+	TArray<FPowerDetail>& outPowerStorageDetails,
+	TArray<FPowerDetail>& outConsumerDetails,
 	PowerCheckerFilterType filterType
 )
 {
@@ -134,20 +134,24 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 		return;
 	}
 
+	TArray<UFGPowerCircuit*> circuits;
+
 	auto circuitGroupId = currentPowerCircuit->GetCircuitGroupID();
 	if (circuitGroupId < 0)
 	{
-		return;
+		circuits.Add(currentPowerCircuit);
 	}
-
-	auto powerCircuitSubsystem = AFGCircuitSubsystem::Get(powerConnection->GetWorld());
-	auto powerGroup = Cast<UFGPowerCircuitGroup>(powerCircuitSubsystem->GetCircuitGroup(currentPowerCircuit->GetCircuitGroupID()));
-	if (!powerGroup)
+	else
 	{
-		return;
+		auto powerCircuitSubsystem = AFGCircuitSubsystem::Get(powerConnection->GetWorld());
+		auto powerGroup = Cast<UFGPowerCircuitGroup>(powerCircuitSubsystem->GetCircuitGroup(currentPowerCircuit->GetCircuitGroupID()));
+		if (powerGroup)
+		{
+			circuits = powerGroup->mCircuits;
+		}
 	}
 
-	for (auto powerCircuit : powerGroup->mCircuits)
+	for (auto powerCircuit : circuits)
 	{
 		for (auto powerInfo : powerCircuit->mPowerInfos)
 		{
@@ -404,7 +408,8 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 	{
 		auto owner = powerConnection->GetOwner();
 
-		auto powerDetailsSorter = [owner](const std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>>& powerDetails, TArray<FPowerDetail>& sortedPowerDetails)
+		auto powerDetailsSorter = [owner]
+		(const std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>>& powerDetails, TArray<FPowerDetail>& sortedPowerDetails)
 		{
 			for (auto itBuilding = powerDetails.begin(); itBuilding != powerDetails.end(); itBuilding++)
 			{
@@ -420,45 +425,45 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 						sortedPowerDetails.Add(powerDetail);
 
 						powerDetail.factories.Sort(
-                            [owner](const AFGBuildableFactory& x, const AFGBuildableFactory& y)
-                            {
-                                float order = owner->GetDistanceTo(&x) - owner->GetDistanceTo(&y);
+							[owner](const AFGBuildableFactory& x, const AFGBuildableFactory& y)
+							{
+								float order = owner->GetDistanceTo(&x) - owner->GetDistanceTo(&y);
 
-                                if (order == 0)
-                                {
-                                    order = x.GetName().Compare(y.GetName());
-                                }
+								if (order == 0)
+								{
+									order = x.GetName().Compare(y.GetName());
+								}
 
-                                return order < 0;
-                            }
-                            );
+								return order < 0;
+							}
+							);
 					}
 				}
 			}
 
 			sortedPowerDetails.Sort(
-                [](const FPowerDetail& x, const FPowerDetail& y)
-                {
-                    float order = (x.powerPerBuilding > 0 ? 0 : 1) - (y.powerPerBuilding > 0 ? 0 : 1);
+				[](const FPowerDetail& x, const FPowerDetail& y)
+				{
+					float order = (x.powerPerBuilding > 0 ? 0 : 1) - (y.powerPerBuilding > 0 ? 0 : 1);
 
-                    if (order == 0)
-                    {
-                        order = x.powerPerBuilding - y.powerPerBuilding;
-                    }
+					if (order == 0)
+					{
+						order = x.powerPerBuilding - y.powerPerBuilding;
+					}
 
-                    if (order == 0)
-                    {
-                        order = UFGItemDescriptor::GetItemName(x.buildingType).CompareTo(UFGItemDescriptor::GetItemName(y.buildingType));
-                    }
+					if (order == 0)
+					{
+						order = UFGItemDescriptor::GetItemName(x.buildingType).CompareTo(UFGItemDescriptor::GetItemName(y.buildingType));
+					}
 
-                    if (order == 0)
-                    {
-                        order = x.potential - y.potential;
-                    }
+					if (order == 0)
+					{
+						order = x.potential - y.potential;
+					}
 
-                    return order < 0;
-                }
-                );			
+					return order < 0;
+				}
+				);
 		};
 
 		powerDetailsSorter(generatorDetails, outGeneratorDetails);
