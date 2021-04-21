@@ -62,11 +62,11 @@ void APowerCheckerLogic::Initialize(TSubclassOf<UFGItemDescriptor> in_dropPodStu
 			IsValidBuildable(Cast<AFGBuildable>(buildableActor));
 		}
 
-		auto gameMode = Cast<AFGGameMode>(UGameplayStatics::GetGameMode(subsystem->GetWorld()));
-		if (gameMode)
-		{
-			gameMode->RegisterRemoteCallObjectClass(UPowerCheckerRCO::StaticClass());
-		}
+		// auto gameMode = Cast<AFGGameMode>(UGameplayStatics::GetGameMode(subsystem->GetWorld()));
+		// if (gameMode)
+		// {
+		// 	gameMode->RegisterRemoteCallObjectClass(UPowerCheckerRCO::StaticClass());
+		// }
 	}
 }
 
@@ -511,7 +511,7 @@ void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
 			PC_LOG_Display(TEXT("    - Super: "), *cls->GetPathName());
 		}
 
-		for (TFieldIterator<UProperty> property(obj->GetClass()); property; ++property)
+		for (TFieldIterator<FProperty> property(obj->GetClass()); property; ++property)
 		{
 			PC_LOG_Display(
 				TEXT("    - "),
@@ -523,25 +523,25 @@ void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
 				TEXT(")")
 				);
 
-			auto floatProperty = Cast<UFloatProperty>(*property);
+			auto floatProperty = CastField<FFloatProperty>(*property);
 			if (floatProperty)
 			{
 				PC_LOG_Display(TEXT("        = "), floatProperty->GetPropertyValue_InContainer(obj));
 			}
 
-			auto intProperty = Cast<UIntProperty>(*property);
+			auto intProperty = CastField<FIntProperty>(*property);
 			if (intProperty)
 			{
 				PC_LOG_Display(TEXT("        = "), intProperty->GetPropertyValue_InContainer(obj));
 			}
 
-			auto boolProperty = Cast<UBoolProperty>(*property);
+			auto boolProperty = CastField<FBoolProperty>(*property);
 			if (boolProperty)
 			{
 				PC_LOG_Display(TEXT("        = "), boolProperty->GetPropertyValue_InContainer(obj) ? TEXT("true") : TEXT("false"));
 			}
 
-			auto structProperty = Cast<UStructProperty>(*property);
+			auto structProperty = CastField<FStructProperty>(*property);
 			if (structProperty && property->GetName() == TEXT("mFactoryTickFunction"))
 			{
 				auto factoryTick = structProperty->ContainerPtrToValuePtr<FFactoryTickFunction>(obj);
@@ -551,7 +551,7 @@ void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
 				}
 			}
 
-			auto strProperty = Cast<UStrProperty>(*property);
+			auto strProperty = CastField<FStrProperty>(*property);
 			if (strProperty)
 			{
 				PC_LOG_Display(TEXT("        = "), *strProperty->GetPropertyValue_InContainer(obj));
