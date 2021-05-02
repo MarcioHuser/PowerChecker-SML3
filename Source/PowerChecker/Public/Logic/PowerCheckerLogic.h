@@ -17,19 +17,19 @@ struct POWERCHECKER_API FPowerDetail
     GENERATED_USTRUCT_BODY()
 public:
 
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     TSubclassOf<class UFGItemDescriptor> buildingType;
 
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     float powerPerBuilding = 0;
 
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     int potential = 100;
 
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     int amount = 0;
 
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     TArray<class AFGBuildableFactory*> factories;
 
 public:
@@ -101,17 +101,17 @@ public:
 
     FCriticalSection eclCritical;
 
-    TSet<class AFGBuildable*> allTeleporters;
+    // TSet<class AFGBuildable*> allTeleporters;
     TSet<class APowerCheckerBuilding*> allPowerCheckers;
 
-    FActorEndPlaySignature::FDelegate removeTeleporterDelegate;
+    // FActorEndPlaySignature::FDelegate removeTeleporterDelegate;
     FActorEndPlaySignature::FDelegate removePowerCheckerDelegate;
 
-    virtual void addTeleporter(class AFGBuildable* actor);
+    // virtual void addTeleporter(class AFGBuildable* actor);
     virtual void addPowerChecker(class APowerCheckerBuilding* actor);
 
-    UFUNCTION()
-    virtual void removeTeleporter(AActor* actor, EEndPlayReason::Type reason);
+    // UFUNCTION()
+    // virtual void removeTeleporter(AActor* actor, EEndPlayReason::Type reason);
     
     UFUNCTION()
     virtual void removePowerChecker(AActor* actor, EEndPlayReason::Type reason);

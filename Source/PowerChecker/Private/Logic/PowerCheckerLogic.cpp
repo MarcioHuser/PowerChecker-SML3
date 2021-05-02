@@ -54,7 +54,7 @@ void APowerCheckerLogic::Initialize(TSubclassOf<UFGItemDescriptor> in_dropPodStu
 		TArray<AActor*> allBuildables;
 		UGameplayStatics::GetAllActorsOfClass(subsystem->GetWorld(), AFGBuildable::StaticClass(), allBuildables);
 
-		removeTeleporterDelegate.BindDynamic(this, &APowerCheckerLogic::removeTeleporter);
+		// removeTeleporterDelegate.BindDynamic(this, &APowerCheckerLogic::removeTeleporter);
 		removePowerCheckerDelegate.BindDynamic(this, &APowerCheckerLogic::removePowerChecker);
 
 		for (auto buildableActor : allBuildables)
@@ -78,7 +78,7 @@ void APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed(AFGBuildable
 void APowerCheckerLogic::Terminate()
 {
 	FScopeLock ScopeLock(&eclCritical);
-	allTeleporters.Empty();
+	// allTeleporters.Empty();
 
 	singleton = nullptr;
 }
@@ -567,11 +567,11 @@ bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 		return false;
 	}
 
-	if (newBuildable->GetClass()->GetPathName() == TEXT("/Game/StorageTeleporter/Buildables/ItemTeleporter/ItemTeleporter_Build.ItemTeleporter_Build_C"))
+	/*if (newBuildable->GetClass()->GetPathName().EndsWith(TEXT("/StorageTeleporter/Buildables/ItemTeleporter/ItemTeleporter_Build.ItemTeleporter_Build_C")))
 	{
 		addTeleporter(newBuildable);
 	}
-	else if (auto powerChecker = Cast<APowerCheckerBuilding>(newBuildable))
+	else*/ if (auto powerChecker = Cast<APowerCheckerBuilding>(newBuildable))
 	{
 		addPowerChecker(powerChecker);
 	}
@@ -583,21 +583,21 @@ bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 	return true;
 }
 
-void APowerCheckerLogic::addTeleporter(AFGBuildable* teleporter)
-{
-	FScopeLock ScopeLock(&eclCritical);
-	allTeleporters.Add(teleporter);
-
-	teleporter->OnEndPlay.Add(removeTeleporterDelegate);
-}
-
-void APowerCheckerLogic::removeTeleporter(AActor* actor, EEndPlayReason::Type reason)
-{
-	FScopeLock ScopeLock(&eclCritical);
-	allTeleporters.Remove(Cast<AFGBuildable>(actor));
-
-	actor->OnEndPlay.Remove(removeTeleporterDelegate);
-}
+// void APowerCheckerLogic::addTeleporter(AFGBuildable* teleporter)
+// {
+// 	FScopeLock ScopeLock(&eclCritical);
+// 	allTeleporters.Add(teleporter);
+//
+// 	teleporter->OnEndPlay.Add(removeTeleporterDelegate);
+// }
+//
+// void APowerCheckerLogic::removeTeleporter(AActor* actor, EEndPlayReason::Type reason)
+// {
+// 	FScopeLock ScopeLock(&eclCritical);
+// 	allTeleporters.Remove(Cast<AFGBuildable>(actor));
+//
+// 	actor->OnEndPlay.Remove(removeTeleporterDelegate);
+// }
 
 void APowerCheckerLogic::addPowerChecker(APowerCheckerBuilding* powerChecker)
 {
