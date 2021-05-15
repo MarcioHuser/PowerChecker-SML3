@@ -44,6 +44,14 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPowerChecker, Log, All)
 		UE_LOG(LogPowerChecker, verbosity, TEXT("%s"), l.wos.str().c_str()) \
 	}
 
+#define PC_LOG_Log(first, ...) PC_LOG_Verbosity(Log, first, ##__VA_ARGS__)
 #define PC_LOG_Display(first, ...) PC_LOG_Verbosity(Display, first, ##__VA_ARGS__)
 #define PC_LOG_Warning(first, ...) PC_LOG_Verbosity(Warning, first, ##__VA_ARGS__)
 #define PC_LOG_Error(first, ...) PC_LOG_Verbosity(Error, first, ##__VA_ARGS__)
+
+#define IS_PC_LOG_LEVEL(level) (APowerCheckerLogic::configuration.logLevel > 0 && APowerCheckerLogic::configuration.logLevel >= static_cast<uint8>(level))
+
+#define PC_LOG_Log_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Log(first, ##__VA_ARGS__)
+#define PC_LOG_Display_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Display(first, ##__VA_ARGS__)
+#define PC_LOG_Warning_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Warning(first, ##__VA_ARGS__)
+#define PC_LOG_Error_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Error(first, ##__VA_ARGS__)

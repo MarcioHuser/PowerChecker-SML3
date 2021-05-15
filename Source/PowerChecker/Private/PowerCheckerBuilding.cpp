@@ -42,16 +42,14 @@ void APowerCheckerBuilding::Tick(float DeltaSeconds)
 
 		if (testCircuitId != currentCircuitId)
 		{
-			if (APowerCheckerLogic::configuration.logInfoEnabled)
-			{
-				PC_LOG_Display(
-					*getTagName(),
-					TEXT("Recalculating because Circuit ID changed from "),
-					currentCircuitId,
-					TEXT(" to "),
-					testCircuitId
-					);
-			}
+			PC_LOG_Display_Condition(
+				ELogVerbosity::Log,
+				*getTagName(),
+				TEXT("Recalculating because Circuit ID changed from "),
+				currentCircuitId,
+				TEXT(" to "),
+				testCircuitId
+				);
 
 			currentCircuitId = testCircuitId;
 			updateMaximumPotential = true;
@@ -72,10 +70,7 @@ void APowerCheckerBuilding::SetIncludePaused(bool in_includePaused)
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			if (APowerCheckerLogic::configuration.logInfoEnabled)
-			{
-				PC_LOG_Display(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
-			}
+			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->SetIncludePaused(this, in_includePaused);
 		}
@@ -98,10 +93,7 @@ void APowerCheckerBuilding::SetIncludeOutOfFuel(bool in_includeOutOfFuel)
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			if (APowerCheckerLogic::configuration.logInfoEnabled)
-			{
-				PC_LOG_Display(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
-			}
+			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->SetIncludeOutOfFuel(this, in_includeOutOfFuel);
 		}
@@ -124,10 +116,7 @@ void APowerCheckerBuilding::TriggerUpdateValues(bool updateMaximumPotential, boo
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			if (APowerCheckerLogic::configuration.logInfoEnabled)
-			{
-				PC_LOG_Display(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
-			}
+			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->TriggerUpdateValues(this, updateMaximumPotential, withDetails, filterType);
 		}
@@ -195,8 +184,8 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 		productionStatus = EProductionStatus::IS_PRODUCING;
 	}
 
-	// PC_LOG_Display(getTagName(), TEXT("Built-in maximum consumption: "), circuitStats.MaximumPowerConsumption)
-	// PC_LOG_Display(getTagName(), TEXT("Calculated maximum: "), calculatedMaximumPotential)
+	// PC_LOG_Debug(getTagName(), TEXT("Built-in maximum consumption: "), circuitStats.MaximumPowerConsumption)
+	// PC_LOG_Debug(getTagName(), TEXT("Calculated maximum: "), calculatedMaximumPotential)
 
 	if (withDetails)
 	{
@@ -210,9 +199,7 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 
 void APowerCheckerBuilding::UpdateValues_Implementation()
 {
-	// if (APowerCheckerLogic::configuration.logInfoEnabled)
-	// {
-	// 	PC_LOG_Display(
+	// 	PC_LOG_Display_Condition(ELogVerbosity::Log,
 	// 		*getTagName(),
 	// 		TEXT("UpdateValues_Implementation: authority = "),
 	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
@@ -223,7 +210,6 @@ void APowerCheckerBuilding::UpdateValues_Implementation()
 	// 		TEXT(" / maximumConsumption = "),
 	// 		maximumConsumption
 	// 		);
-	// }
 
 	OnUpdateValues.Broadcast();
 }
@@ -235,9 +221,7 @@ void APowerCheckerBuilding::UpdateValuesWithDetails_Implementation
 	const TArray<FPowerDetail>& consumerDetails
 )
 {
-	// if (APowerCheckerLogic::configuration.logInfoEnabled)
-	// {
-	// 	PC_LOG_Display(
+	// PC_LOG_Display_Condition(ELogVerbosity::Log,
 	// 		*getTagName(),
 	// 		TEXT("UpdateValuesWithDetails_Implementation: authority = "),
 	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
@@ -251,7 +235,6 @@ void APowerCheckerBuilding::UpdateValuesWithDetails_Implementation
 	// 		powerDetails.Num(),
 	// 		TEXT(" items")
 	// 		);
-	// }
 
 	OnUpdateValuesWithDetails.Broadcast(generatorDetails, powerStorageDetails, consumerDetails);
 }
@@ -302,9 +285,7 @@ bool APowerCheckerBuilding::checkPlayerIsNear()
 
 		if (distance <= APowerCheckerLogic::configuration.maximumPlayerDistance)
 		{
-			// if (APowerCheckerLogic::configuration.logInfoEnabled)
-			// {
-			// 	PC_LOG_Display(
+			// PC_LOG_Display_Condition(ELogVerbosity::Log,
 			// 		*getTagName(),
 			// 		TEXT("Player "),
 			// 		*playerState->GetPlayerName(),
@@ -315,7 +296,6 @@ bool APowerCheckerBuilding::checkPlayerIsNear()
 			// 		TEXT(" / distance = "),
 			// 		distance
 			// 		);
-			// }
 
 			return true;
 		}

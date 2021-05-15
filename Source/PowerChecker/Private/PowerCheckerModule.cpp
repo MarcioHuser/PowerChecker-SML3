@@ -59,8 +59,6 @@ void FPowerCheckerModule::StartupModule()
 
 		SUBSCRIBE_METHOD_VIRTUAL_AFTER(AFGBuildableGeneratorFuel::SetPendingPotential, ObjectInstance, setPendingPotentialCallback);
 	}
-
-	PC_LOG_Display(TEXT("==="));
 #endif
 }
 
@@ -85,21 +83,22 @@ void FPowerCheckerModule::onPowerCircuitChangedHook(UFGPowerCircuit* powerCircui
 
 void FPowerCheckerModule::setPendingPotentialCallback(class AFGBuildableFactory* buildable, float potential)
 {
-	PC_LOG_Display(
-        TEXT("SetPendingPotential of building "),
-        *GetPathNameSafe(buildable),
-        TEXT(" to "),
-        potential
-        );
+	PC_LOG_Display_Condition(
+		ELogVerbosity::Display,
+		TEXT("SetPendingPotential of building "),
+		*GetPathNameSafe(buildable),
+		TEXT(" to "),
+		potential
+		);
 
 	auto powerInfo = buildable->GetPowerInfo();
-	if(!powerInfo)
+	if (!powerInfo)
 	{
 		return;
 	}
 
 	auto powerCircuit = powerInfo->GetPowerCircuit();
-	if(!powerCircuit)
+	if (!powerCircuit)
 	{
 		return;
 	}

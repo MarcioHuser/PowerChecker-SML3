@@ -171,7 +171,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			auto factory = Cast<AFGBuildableFactory>(nextActor);
 			auto powerStorage = Cast<AFGBuildablePowerStorage>(nextActor);
 
-			if (configuration.logInfoEnabled)
+			if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
 			{
 				PC_LOG_Display(
 					TEXT(" PowerChecker: "),
@@ -235,10 +235,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 
 				if (powerInfo->GetTargetConsumption())
 				{
-					if (configuration.logInfoEnabled)
-					{
-						PC_LOG_Display(TEXT("    Target Consumption: "), powerInfo->GetTargetConsumption());
-					}
+					PC_LOG_Display_Condition(ELogVerbosity::Log, TEXT("    Target Consumption: "), powerInfo->GetTargetConsumption());
 
 					totalMaximumPotential += powerInfo->GetTargetConsumption();
 
@@ -252,7 +249,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			}
 			else if (generator || powerInfo->GetDynamicProductionCapacity())
 			{
-				if (configuration.logInfoEnabled)
+				if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
 				{
 					PC_LOG_Display(TEXT("    Can Produce: "), (generator && generator->CanProduce()) ? TEXT("true") : TEXT("false"));
 					PC_LOG_Display(TEXT("    Load: "), generator ? generator->GetLoadPercentage() : 0, TEXT("%"));
@@ -330,7 +327,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			{
 				if (!factory || factory->IsConfigured() && factory->GetProducingPowerConsumption())
 				{
-					if (configuration.logInfoEnabled)
+					if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
 					{
 						PC_LOG_Display(TEXT("    Power Comsumption: "), factory ? factory->GetProducingPowerConsumption() : 0);
 						PC_LOG_Display(TEXT("    Default Power Comsumption: "), factory ? factory->GetDefaultProducingPowerConsumption() : 0);
@@ -391,13 +388,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			}
 			else
 			{
-				if (configuration.logInfoEnabled)
-				{
-					PC_LOG_Display(
-						TEXT("PowerChecker: Unknown "),
-						*className
-						);
-				}
+				PC_LOG_Display_Condition(ELogVerbosity::Log, TEXT("PowerChecker: Unknown "), *className);
 
 				// dumpUnknownClass(nextActor);
 			}
@@ -472,9 +463,9 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 	}
 }
 
-bool APowerCheckerLogic::IsLogInfoEnabled()
+int APowerCheckerLogic::GetLogLevel()
 {
-	return configuration.logInfoEnabled;
+	return configuration.logLevel;
 }
 
 float APowerCheckerLogic::GetMaximumPlayerDistance()
@@ -502,7 +493,7 @@ bool APowerCheckerLogic::inheritsFromClass(AActor* owner, const FString& classNa
 
 void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
 {
-	if (configuration.logInfoEnabled)
+	if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
 	{
 		PC_LOG_Display(TEXT("Unknown Class "), *obj->GetClass()->GetPathName());
 
@@ -571,7 +562,8 @@ bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 	{
 		addTeleporter(newBuildable);
 	}
-	else*/ if (auto powerChecker = Cast<APowerCheckerBuilding>(newBuildable))
+	else*/
+	if (auto powerChecker = Cast<APowerCheckerBuilding>(newBuildable))
 	{
 		addPowerChecker(powerChecker);
 	}
@@ -623,7 +615,7 @@ void APowerCheckerLogic::setConfiguration(const FPowerChecker_ConfigStruct& in_c
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 	PC_LOG_Display(TEXT("StartupModule"));
 
-	PC_LOG_Display(TEXT("autoUpdate = "), configuration.logInfoEnabled ? TEXT("true") : TEXT("false"));
+	PC_LOG_Display(TEXT("logLevel = "), configuration.logLevel);
 	PC_LOG_Display(TEXT("maximumPlayerDistance = "), configuration.maximumPlayerDistance);
 	PC_LOG_Display(TEXT("spareLimit = "), configuration.spareLimit);
 	PC_LOG_Display(TEXT("overflowBlinkCycle = "), configuration.overflowBlinkCycle);

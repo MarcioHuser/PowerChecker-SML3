@@ -10,7 +10,7 @@ struct FPowerChecker_ConfigStruct {
     GENERATED_BODY()
 public:
     UPROPERTY(BlueprintReadWrite)
-    bool logInfoEnabled;
+    int32 logLevel;
 
     UPROPERTY(BlueprintReadWrite)
     float maximumPlayerDistance;

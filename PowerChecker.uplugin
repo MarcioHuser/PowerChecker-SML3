@@ -1,8 +1,8 @@
 {
 	"FileVersion": 3,
 	"Version": 2,
-	"VersionName": "2.0.4",
-	"SemVersion": "2.0.4",
+	"VersionName": "2.0.5",
+	"SemVersion": "2.0.5",
 	"FriendlyName": "Power Checker",
 	"Description": "Check if your fuses can blow!",
 	"Category": "Modding",
@@ -25,12 +25,12 @@
 	"Plugins": [
 		{
 			"Name": "SML",
-			"SemVersion": "^3.1.0",
+			"SemVersion": "^3.1.1",
 			"Enabled": true
 		},
 		{
 			"Name": "MarcioCommonLibs",
-			"SemVersion": "^1.0.1",
+			"SemVersion": "^1.0.2",
 			"Enabled": true
 		}
 	]
