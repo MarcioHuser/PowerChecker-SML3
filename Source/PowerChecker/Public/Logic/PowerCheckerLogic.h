@@ -24,7 +24,7 @@ public:
     float powerPerBuilding = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
-    int potential = 100;
+    float potential = 100.0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PowerCheckerLogic|PowerDetail")
     int amount = 0;

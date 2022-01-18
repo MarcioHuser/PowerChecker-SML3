@@ -123,9 +123,9 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 	totalMaximumPotential = 0;
 
 	TSet<AActor*> seenActors;
-	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>> generatorDetails;
-	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>> powerStorageDetails;
-	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>> consumerDetails;
+	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<float, FPowerDetail>>> generatorDetails;
+	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<float, FPowerDetail>>> powerStorageDetails;
+	std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<float, FPowerDetail>>> consumerDetails;
 
 	// auto railroadSubsystem = AFGRailroadSubsystem::Get(powerConnection->GetWorld());
 	auto currentPowerCircuit = powerConnection->GetPowerCircuit();
@@ -298,7 +298,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 				{
 					auto& detail = generatorDetails[buildDescriptor]
 						[producedPower]
-						[int(0.5 + (generator ? generator->GetPendingPotential() : 1) * 100)];
+						[(generator ? generator->GetPendingPotential() : 1) * 100];
 
 					detail.amount++;
 
@@ -376,7 +376,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 					{
 						auto& detail = consumerDetails[buildDescriptor]
 							[maxComsumption]
-							[int(0.5 + (factory ? factory->GetPendingPotential() : 1) * 100)];
+							[(factory ? factory->GetPendingPotential() : 1) * 100];
 
 						detail.amount++;
 						if (factory)
@@ -400,7 +400,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 		auto owner = powerConnection->GetOwner();
 
 		auto powerDetailsSorter = [owner]
-		(const std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<int, FPowerDetail>>>& powerDetails, TArray<FPowerDetail>& sortedPowerDetails)
+		(const std::map<TSubclassOf<UFGItemDescriptor>, std::map<float, std::map<float, FPowerDetail>>>& powerDetails, TArray<FPowerDetail>& sortedPowerDetails)
 		{
 			for (auto itBuilding = powerDetails.begin(); itBuilding != powerDetails.end(); itBuilding++)
 			{
