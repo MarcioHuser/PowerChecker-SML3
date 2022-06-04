@@ -218,9 +218,19 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 
 				if (includePowerDetails)
 				{
-					consumerDetails[UFGRecipe::GetProducts(locomotive->GetBuiltWithRecipe())[0].ItemClass]
-						[locomotive->GetPowerInfo()->GetMaximumTargetConsumption()]
-						[100].amount++;
+					if (auto locomotiveRecipe = locomotive->GetBuiltWithRecipe())
+					{
+						auto locomotiveProducts = UFGRecipe::GetProducts(locomotiveRecipe);
+						if (locomotiveProducts.Num() > 0)
+						{
+							if (auto locomotiveClass = locomotiveProducts[0].ItemClass)
+							{
+								consumerDetails[locomotiveClass]
+									[locomotive->GetPowerInfo()->GetMaximumTargetConsumption()]
+									[100].amount++;
+							}
+						}
+					}
 				}
 			}
 			else if (auto dropPod = Cast<AFGDropPod>(nextActor))
