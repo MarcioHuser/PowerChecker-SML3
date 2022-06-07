@@ -245,7 +245,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 
 				if (powerInfo->GetTargetConsumption())
 				{
-					PC_LOG_Display_Condition(ELogVerbosity::Log, TEXT("    Target Consumption: "), powerInfo->GetTargetConsumption());
+					PC_LOG_Display_Condition(TEXT("    Target Consumption: "), powerInfo->GetTargetConsumption());
 
 					totalMaximumPotential += powerInfo->GetTargetConsumption();
 
@@ -398,7 +398,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			}
 			else
 			{
-				PC_LOG_Display_Condition(ELogVerbosity::Log, TEXT("PowerChecker: Unknown "), *className);
+				PC_LOG_Display_Condition(TEXT("PowerChecker: Unknown "), *className);
 
 				// dumpUnknownClass(nextActor);
 			}

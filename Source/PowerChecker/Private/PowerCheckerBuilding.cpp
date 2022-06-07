@@ -43,7 +43,6 @@ void APowerCheckerBuilding::Tick(float DeltaSeconds)
 		if (testCircuitId != currentCircuitId)
 		{
 			PC_LOG_Display_Condition(
-				ELogVerbosity::Log,
 				*getTagName(),
 				TEXT("Recalculating because Circuit ID changed from "),
 				currentCircuitId,
@@ -70,7 +69,7 @@ void APowerCheckerBuilding::SetIncludePaused(bool in_includePaused)
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
+			PC_LOG_Display_Condition(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->SetIncludePaused(this, in_includePaused);
 		}
@@ -93,7 +92,7 @@ void APowerCheckerBuilding::SetIncludeOutOfFuel(bool in_includeOutOfFuel)
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
+			PC_LOG_Display_Condition(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->SetIncludeOutOfFuel(this, in_includeOutOfFuel);
 		}
@@ -116,7 +115,7 @@ void APowerCheckerBuilding::TriggerUpdateValues(bool updateMaximumPotential, boo
 		auto rco = UPowerCheckerRCO::getRCO(GetWorld());
 		if (rco)
 		{
-			PC_LOG_Display_Condition(ELogVerbosity::Log, *getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
+			PC_LOG_Display_Condition(*getTagName(), TEXT("Calling SetCustomInjectedInput at server"));
 
 			rco->TriggerUpdateValues(this, updateMaximumPotential, withDetails, filterType);
 		}
@@ -199,7 +198,7 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 
 void APowerCheckerBuilding::UpdateValues_Implementation()
 {
-	// 	PC_LOG_Display_Condition(ELogVerbosity::Log,
+	// 	PC_LOG_Display_Condition(
 	// 		*getTagName(),
 	// 		TEXT("UpdateValues_Implementation: authority = "),
 	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
@@ -221,7 +220,7 @@ void APowerCheckerBuilding::UpdateValuesWithDetails_Implementation
 	const TArray<FPowerDetail>& consumerDetails
 )
 {
-	// PC_LOG_Display_Condition(ELogVerbosity::Log,
+	// PC_LOG_Display_Condition(
 	// 		*getTagName(),
 	// 		TEXT("UpdateValuesWithDetails_Implementation: authority = "),
 	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
@@ -285,7 +284,7 @@ bool APowerCheckerBuilding::checkPlayerIsNear()
 
 		if (distance <= APowerCheckerLogic::configuration.maximumPlayerDistance)
 		{
-			// PC_LOG_Display_Condition(ELogVerbosity::Log,
+			// PC_LOG_Display_Condition(
 			// 		*getTagName(),
 			// 		TEXT("Player "),
 			// 		*playerState->GetPlayerName(),

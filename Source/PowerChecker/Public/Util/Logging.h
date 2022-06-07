@@ -51,7 +51,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogPowerChecker, Log, All)
 
 #define IS_PC_LOG_LEVEL(level) (APowerCheckerLogic::configuration.logLevel > 0 && APowerCheckerLogic::configuration.logLevel >= static_cast<uint8>(level))
 
-#define PC_LOG_Log_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Log(first, ##__VA_ARGS__)
-#define PC_LOG_Display_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Display(first, ##__VA_ARGS__)
-#define PC_LOG_Warning_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Warning(first, ##__VA_ARGS__)
-#define PC_LOG_Error_Condition(level, first, ...) if(IS_PC_LOG_LEVEL(level)) PC_LOG_Error(first, ##__VA_ARGS__)
+#define PC_LOG_Log_Condition(first, ...) if(IS_PC_LOG_LEVEL(ELogVerbosity::Log)) PC_LOG_Log(first, ##__VA_ARGS__)
+#define PC_LOG_Display_Condition(first, ...) if(IS_PC_LOG_LEVEL(ELogVerbosity::Display)) PC_LOG_Display(first, ##__VA_ARGS__)
+#define PC_LOG_Warning_Condition(first, ...) if(IS_PC_LOG_LEVEL(ELogVerbosity::Warning)) PC_LOG_Warning(first, ##__VA_ARGS__)
+#define PC_LOG_Error_Condition(first, ...) if(IS_PC_LOG_LEVEL(ELogVerbosity::Error)) PC_LOG_Error(first, ##__VA_ARGS__)

@@ -84,7 +84,6 @@ void FPowerCheckerModule::onPowerCircuitChangedHook(UFGPowerCircuit* powerCircui
 void FPowerCheckerModule::setPendingPotentialCallback(class AFGBuildableFactory* buildable, float potential)
 {
 	PC_LOG_Display_Condition(
-		ELogVerbosity::Display,
 		TEXT("SetPendingPotential of building "),
 		*GetPathNameSafe(buildable),
 		TEXT(" to "),
