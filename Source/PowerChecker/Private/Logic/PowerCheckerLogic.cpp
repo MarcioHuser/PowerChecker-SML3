@@ -473,7 +473,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 	}
 }
 
-int APowerCheckerLogic::GetLogLevel()
+int APowerCheckerLogic::GetLogLevelPC()
 {
 	return configuration.logLevel;
 }

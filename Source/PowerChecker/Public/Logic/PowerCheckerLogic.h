@@ -68,7 +68,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, BlueprintPure, Category="PowerCheckerLogic")
-    static int GetLogLevel();
+    static int GetLogLevelPC();
 
     UFUNCTION(BlueprintCallable, BlueprintPure, Category="PowerCheckerLogic")
     static float GetMaximumPlayerDistance();
