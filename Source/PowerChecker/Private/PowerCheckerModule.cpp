@@ -83,6 +83,11 @@ void FPowerCheckerModule::onPowerCircuitChangedHook(UFGPowerCircuit* powerCircui
 
 void FPowerCheckerModule::setPendingPotentialCallback(class AFGBuildableFactory* buildable, float potential)
 {
+	if (!APowerCheckerLogic::singleton)
+	{
+		return;
+	}
+	
 	PC_LOG_Display_Condition(
 		TEXT("SetPendingPotential of building "),
 		*GetPathNameSafe(buildable),
