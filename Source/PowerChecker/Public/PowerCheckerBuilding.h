@@ -1,20 +1,29 @@
 ﻿#pragma once
+#include "FGPowerCircuit.h"
 #include "Buildables/FGBuildableFactory.h"
 #include "Logic/PowerCheckerLogic.h"
 #include "PowerCheckerBuilding.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(
-	FUpdateValues
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FUpdateValues,
+	const FSimplePowerCircuitStats&,
+	powerCircuitStats,
+	float,
+	sumPowerStore
 	);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(
 	FUpdateValuesWithDetails,
+	const FSimplePowerCircuitStats&,
+	powerCircuitStats,
+	float,
+	sumPowerStore,
 	const TArray<FPowerDetail>&,
 	generatorDetails,
-    const TArray<FPowerDetail>&,
-    powerStorageDetails,
-    const TArray<FPowerDetail>&,
-    consumerDetails
+	const TArray<FPowerDetail>&,
+	powerStorageDetails,
+	const TArray<FPowerDetail>&,
+	consumerDetails
 	);
 
 UCLASS(Blueprintable)
@@ -54,15 +63,17 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "PowerChecker")
 	FUpdateValues OnUpdateValues;
 
-	UFUNCTION(BlueprintCallable, Category = "EfficiencyChecker", NetMulticast, Reliable)
-	virtual void UpdateValues();
+	UFUNCTION(BlueprintCallable, Category = "PowerChecker", NetMulticast, Reliable)
+	virtual void UpdateValues(const FSimplePowerCircuitStats& circuitStats, float batterySumPowerStore);
 
 	UPROPERTY(BlueprintAssignable, Category = "PowerChecker")
 	FUpdateValuesWithDetails OnUpdateValuesWithDetails;
 
-	UFUNCTION(BlueprintCallable, Category = "EfficiencyChecker", NetMulticast, Reliable)
+	UFUNCTION(BlueprintCallable, Category = "PowerChecker", NetMulticast, Reliable)
 	virtual void UpdateValuesWithDetails
 	(
+		const FSimplePowerCircuitStats& circuitStats,
+		float batterySumPowerStore,
 		const TArray<FPowerDetail>& generatorDetails,
 		const TArray<FPowerDetail>& powerStorageDetails,
 		const TArray<FPowerDetail>& consumerDetails

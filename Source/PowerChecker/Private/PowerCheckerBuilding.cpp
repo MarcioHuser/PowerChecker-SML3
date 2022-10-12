@@ -129,9 +129,11 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 	auto powerCircuit = powerConnection ? powerConnection->GetPowerCircuit() : nullptr;
 
 	FPowerCircuitStats circuitStats;
+	float batterySumPowerStore = 0;
 	if (powerCircuit)
 	{
 		powerCircuit->GetStats(circuitStats);
+		batterySumPowerStore = powerCircuit->GetBatterySumPowerStore();
 	}
 
 	TArray<FPowerDetail> generatorDetails;
@@ -186,56 +188,67 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 	// PC_LOG_Debug(getTagName(), TEXT("Built-in maximum consumption: "), circuitStats.MaximumPowerConsumption)
 	// PC_LOG_Debug(getTagName(), TEXT("Calculated maximum: "), calculatedMaximumPotential)
 
+	FSimplePowerCircuitStats simpleCircuitStats;
+	simpleCircuitStats.PowerProductionCapacity = circuitStats.PowerProductionCapacity;
+	simpleCircuitStats.PowerConsumed = circuitStats.PowerConsumed;
+	simpleCircuitStats.MaximumPowerConsumption = circuitStats.MaximumPowerConsumption;
+	
 	if (withDetails)
 	{
-		UpdateValuesWithDetails(generatorDetails, powerStorageDetails, consumerDetails);
+		UpdateValuesWithDetails(simpleCircuitStats, batterySumPowerStore, generatorDetails, powerStorageDetails, consumerDetails);
 	}
 	else
 	{
-		UpdateValues();
+		UpdateValues(simpleCircuitStats, batterySumPowerStore);
 	}
 }
 
-void APowerCheckerBuilding::UpdateValues_Implementation()
+void APowerCheckerBuilding::UpdateValues_Implementation(const FSimplePowerCircuitStats& circuitStats, float batterySumPowerStore)
 {
-	// 	PC_LOG_Display_Condition(
-	// 		*getTagName(),
-	// 		TEXT("UpdateValues_Implementation: authority = "),
-	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
-	// 		TEXT(" / maximumProduction = "),
-	// 		maximumProduction,
-	// 		TEXT(" / currentConsumption = "),
-	// 		currentConsumption,
-	// 		TEXT(" / maximumConsumption = "),
-	// 		maximumConsumption
-	// 		);
+	// PC_LOG_Display_Condition(
+	// 	*getTagName(),
+	// 	TEXT("UpdateValues_Implementation: authority = "),
+	// 	HasAuthority() ? TEXT("true") : TEXT("false"),
+	// 	TEXT(" / maximumProduction = "),
+	// 	circuitStats.PowerProduced,
+	// 	TEXT(" / currentConsumption = "),
+	// 	circuitStats.PowerConsumed,
+	// 	TEXT(" / maximumConsumption = "),
+	// 	circuitStats.MaximumPowerConsumption
+	// 	);
 
-	OnUpdateValues.Broadcast();
+	OnUpdateValues.Broadcast(circuitStats, batterySumPowerStore);
 }
 
 void APowerCheckerBuilding::UpdateValuesWithDetails_Implementation
 (
+	const FSimplePowerCircuitStats& circuitStats,
+	float batterySumPowerStore,
 	const TArray<FPowerDetail>& generatorDetails,
 	const TArray<FPowerDetail>& powerStorageDetails,
 	const TArray<FPowerDetail>& consumerDetails
 )
 {
 	// PC_LOG_Display_Condition(
-	// 		*getTagName(),
-	// 		TEXT("UpdateValuesWithDetails_Implementation: authority = "),
-	// 		HasAuthority() ? TEXT("true") : TEXT("false"),
-	// 		TEXT(" / maximumProduction = "),
-	// 		maximumProduction,
-	// 		TEXT(" / currentConsumption = "),
-	// 		currentConsumption,
-	// 		TEXT(" / maximumConsumption = "),
-	// 		maximumConsumption,
-	// 		TEXT(" / powerDetails = "),
-	// 		powerDetails.Num(),
-	// 		TEXT(" items")
-	// 		);
+	// 	*getTagName(),
+	// 	TEXT("UpdateValuesWithDetails_Implementation: authority = "),
+	// 	HasAuthority() ? TEXT("true") : TEXT("false"),
+	// 	TEXT(" / maximumProduction = "),
+	// 	circuitStats.PowerProduced,
+	// 	TEXT(" / currentConsumption = "),
+	// 	circuitStats.PowerConsumed,
+	// 	TEXT(" / maximumConsumption = "),
+	// 	circuitStats.MaximumPowerConsumption,
+	// 	TEXT(" / generatorDetails = "),
+	// 	generatorDetails.Num(),
+	// 	TEXT(" items / powerStorageDetails = "),
+	// 	powerStorageDetails.Num(),
+	// 	TEXT(" items / consumerDetails = "),
+	// 	consumerDetails.Num(),
+	// 	TEXT(" items")
+	// 	);
 
-	OnUpdateValuesWithDetails.Broadcast(generatorDetails, powerStorageDetails, consumerDetails);
+	OnUpdateValuesWithDetails.Broadcast(circuitStats, batterySumPowerStore, generatorDetails, powerStorageDetails, consumerDetails);
 }
 
 EProductionStatus APowerCheckerBuilding::GetProductionIndicatorStatus() const
