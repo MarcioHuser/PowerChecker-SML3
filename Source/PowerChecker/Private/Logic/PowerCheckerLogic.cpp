@@ -272,15 +272,11 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 						);
 				}
 
-				auto producedPower = generator ? generator->GetPowerProductionCapacity() : 0;
+				auto producedPower = FMath::Max(powerInfo->GetBaseProduction(), generator ? generator->GetPowerProductionCapacity() : 0);
 				if (!producedPower)
 				{
-					producedPower = powerInfo->GetBaseProduction();
-					if (!producedPower)
-					{
-						//producedPower = generator->CalcPowerProductionCapacityForPotential(generator->GetPendingPotential());
-						producedPower = powerInfo->GetDynamicProductionCapacity();
-					}
+					//producedPower = generator->CalcPowerProductionCapacityForPotential(generator->GetPendingPotential());
+					producedPower = powerInfo->GetDynamicProductionCapacity();
 				}
 
 				auto includeDetails = producedPower && buildDescriptor && includePowerDetails;
