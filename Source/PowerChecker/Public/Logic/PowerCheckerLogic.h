@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "UObject/CoreNet.h"
+
 #include "FGPowerCircuit.h"
 #include "PowerChecker_ConfigStruct.h"
 #include "PowerCheckerLogic.generated.h"
@@ -28,7 +30,7 @@ public:
 	float MaximumPowerConsumption;
 
 public:
-	FORCEINLINE ~FSimplePowerCircuitStats() = default;
+	//FORCEINLINE ~FSimplePowerCircuitStats() = default;
 };
 
 USTRUCT(Blueprintable)
@@ -52,7 +54,7 @@ public:
 	TArray<class AFGBuildableFactory*> factories;
 
 public:
-	FORCEINLINE ~FPowerDetail() = default;
+	//FORCEINLINE ~FPowerDetail() = default;
 };
 
 UCLASS(Blueprintable)

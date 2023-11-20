@@ -4,11 +4,12 @@
 #include "Util/Logging.h"
 #include "Util/Optimize.h"
 
+#include "UObject/CoreNet.h"
+
 #include "FGCharacterPlayer.h"
 #include "FGPowerCircuit.h"
 #include "FGPowerConnectionComponent.h"
-
-#include "GeneratedCodeHelpers.h"
+#include "Net/UnrealNetwork.h"
 
 #ifndef OPTIMIZE
 #pragma optimize( "", off )

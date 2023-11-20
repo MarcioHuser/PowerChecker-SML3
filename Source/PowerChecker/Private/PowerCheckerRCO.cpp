@@ -3,6 +3,7 @@
 #include "Util/Optimize.h"
 
 #include "FGPlayerController.h"
+#include "Net/UnrealNetwork.h"
 
 #ifndef OPTIMIZE
 #pragma optimize( "", off )

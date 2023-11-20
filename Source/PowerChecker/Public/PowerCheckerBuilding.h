@@ -1,4 +1,7 @@
 ﻿#pragma once
+
+#include "UObject/CoreNet.h"
+
 #include "FGPowerCircuit.h"
 #include "Buildables/FGBuildableFactory.h"
 #include "Logic/PowerCheckerLogic.h"

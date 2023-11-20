@@ -4,6 +4,8 @@
 #include "Util/Logging.h"
 #include "Util/Optimize.h"
 
+#include "UObject/CoreNet.h"
+
 #include "Buildables/FGBuildablePowerPole.h"
 #include "FGCircuitSubsystem.h"
 #include "FGDropPod.h"

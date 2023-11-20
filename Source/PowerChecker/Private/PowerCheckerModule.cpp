@@ -3,6 +3,8 @@
 #include "util/Logging.h"
 #include "Util/Optimize.h"
 
+#include "UObject/CoreNet.h"
+
 #include "FGCircuitSubsystem.h"
 #include "FGPowerCircuit.h"
 #include "FGPowerInfoComponent.h"
@@ -39,7 +41,7 @@ void FPowerCheckerModule::StartupModule()
 	{
 		void* ObjectInstance = GetMutableDefault<UFGPowerCircuit>();
 
-		SUBSCRIBE_METHOD_VIRTUAL_AFTER(UFGPowerCircuit::OnCircuitChanged, ObjectInstance, onPowerCircuitChangedHook)
+		SUBSCRIBE_METHOD_VIRTUAL_AFTER(UFGPowerCircuit::OnCircuitChanged, ObjectInstance, onPowerCircuitChangedHook);
 	}
 
 	{
