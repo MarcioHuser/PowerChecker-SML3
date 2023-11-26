@@ -122,7 +122,7 @@ public:
 
 	FCriticalSection eclCritical;
 
-	// TSet<class AFGBuildable*> allTeleporters;
+	// TSet<class AFGBuildable*> allPowerCheckes;
 	TSet<class APowerCheckerBuilding*> allPowerCheckers;
 
 	// FActorEndPlaySignature::FDelegate removeTeleporterDelegate;
