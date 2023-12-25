@@ -1,7 +1,7 @@
 ﻿#include "PowerCheckerModule.h"
 #include "PowerCheckerBuilding.h"
-#include "util/Logging.h"
-#include "Util/Optimize.h"
+#include "Util/PCLogging.h"
+#include "Util/PCOptimize.h"
 
 #include "UObject/CoreNet.h"
 
@@ -14,7 +14,7 @@
 #include "Patching/NativeHookManager.h"
 
 #ifndef OPTIMIZE
-#pragma optimize( "", off )
+#pragma optimize("", off )
 #endif
 
 // std::map<FString, float> FPowerCheckerModule::powerConsumptionMap;
@@ -125,5 +125,5 @@ void FPowerCheckerModule::setPendingPotentialCallback(class AFGBuildableFactory*
 IMPLEMENT_GAME_MODULE(FPowerCheckerModule, PowerChecker);
 
 #ifndef OPTIMIZE
-#pragma optimize( "", on )
+#pragma optimize("", on )
 #endif

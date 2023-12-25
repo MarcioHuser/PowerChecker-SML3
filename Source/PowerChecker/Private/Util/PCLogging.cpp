@@ -1,3 +1,3 @@
-﻿#include "Util/Logging.h"
+﻿#include "Util/PCLogging.h"
 
 DEFINE_LOG_CATEGORY(LogPowerChecker);

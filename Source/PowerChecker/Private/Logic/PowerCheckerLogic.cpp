@@ -1,8 +1,8 @@
 ﻿#include "Logic/PowerCheckerLogic.h"
 #include "PowerCheckerModule.h"
 #include "PowerCheckerRCO.h"
-#include "Util/Logging.h"
-#include "Util/Optimize.h"
+#include "Util/PCLogging.h"
+#include "Util/PCOptimize.h"
 
 #include "UObject/CoreNet.h"
 
@@ -26,7 +26,7 @@
 #include "Buildables/FGBuildablePowerStorage.h"
 
 #ifndef OPTIMIZE
-#pragma optimize( "", off )
+#pragma optimize("", off )
 #endif
 
 APowerCheckerLogic* APowerCheckerLogic::singleton = nullptr;
@@ -47,17 +47,13 @@ void APowerCheckerLogic::Initialize(TSubclassOf<UFGItemDescriptor> in_dropPodStu
 
 	if (subsystem)
 	{
-		FOnBuildableConstructedGlobal::FDelegate constructedDelegate;
-
-		constructedDelegate.BindDynamic(this, &APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed);
-
-		subsystem->BuildableConstructedGlobalDelegate.Add(constructedDelegate);
+		subsystem->BuildableConstructedGlobalDelegate.AddDynamic(this, &APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed);
 
 		TArray<AActor*> allBuildables;
 		UGameplayStatics::GetAllActorsOfClass(subsystem->GetWorld(), AFGBuildable::StaticClass(), allBuildables);
 
 		// removeTeleporterDelegate.BindDynamic(this, &APowerCheckerLogic::removeTeleporter);
-		removePowerCheckerDelegate.BindDynamic(this, &APowerCheckerLogic::removePowerChecker);
+		// removePowerCheckerDelegate.BindDynamic(this, &APowerCheckerLogic::removePowerChecker);
 
 		for (auto buildableActor : allBuildables)
 		{
@@ -242,8 +238,8 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 					continue;
 				}
 
-				// dumpUnknownClass(dropPod);
-				// dumpUnknownClass(powerInfo);
+				// UMarcioCommonLibsUtils::DumpUnknownClass(dropPod);
+				// UMarcioCommonLibsUtils::DumpUnknownClass(powerInfo);
 
 				if (powerInfo->GetTargetConsumption())
 				{
@@ -398,7 +394,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			{
 				PC_LOG_Display_Condition(TEXT("PowerChecker: Unknown "), *className);
 
-				// dumpUnknownClass(nextActor);
+				// UMarcioCommonLibsUtils::DumpUnknownClass(nextActor);
 			}
 		}
 	}
@@ -499,65 +495,65 @@ bool APowerCheckerLogic::inheritsFromClass(AActor* owner, const FString& classNa
 	return false;
 }
 
-void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
-{
-	if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
-	{
-		PC_LOG_Display(TEXT("Unknown Class "), *obj->GetClass()->GetPathName());
-
-		for (auto cls = obj->GetClass()->GetSuperClass(); cls && cls != AActor::StaticClass(); cls = cls->GetSuperClass())
-		{
-			PC_LOG_Display(TEXT("    - Super: "), *cls->GetPathName());
-		}
-
-		for (TFieldIterator<FProperty> property(obj->GetClass()); property; ++property)
-		{
-			PC_LOG_Display(
-				TEXT("    - "),
-				*property->GetName(),
-				TEXT(" ("),
-				*property->GetCPPType(),
-				TEXT(" / "),
-				*property->GetClass()->GetName(),
-				TEXT(")")
-				);
-
-			auto floatProperty = CastField<FFloatProperty>(*property);
-			if (floatProperty)
-			{
-				PC_LOG_Display(TEXT("        = "), floatProperty->GetPropertyValue_InContainer(obj));
-			}
-
-			auto intProperty = CastField<FIntProperty>(*property);
-			if (intProperty)
-			{
-				PC_LOG_Display(TEXT("        = "), intProperty->GetPropertyValue_InContainer(obj));
-			}
-
-			auto boolProperty = CastField<FBoolProperty>(*property);
-			if (boolProperty)
-			{
-				PC_LOG_Display(TEXT("        = "), boolProperty->GetPropertyValue_InContainer(obj) ? TEXT("true") : TEXT("false"));
-			}
-
-			auto structProperty = CastField<FStructProperty>(*property);
-			if (structProperty && property->GetName() == TEXT("mFactoryTickFunction"))
-			{
-				auto factoryTick = structProperty->ContainerPtrToValuePtr<FFactoryTickFunction>(obj);
-				if (factoryTick)
-				{
-					PC_LOG_Display(TEXT("    - Tick Interval = "), factoryTick->TickInterval);
-				}
-			}
-
-			auto strProperty = CastField<FStrProperty>(*property);
-			if (strProperty)
-			{
-				PC_LOG_Display(TEXT("        = "), *strProperty->GetPropertyValue_InContainer(obj));
-			}
-		}
-	}
-}
+// void APowerCheckerLogic::dumpUnknownClass(UObject* obj)
+// {
+// 	if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
+// 	{
+// 		PC_LOG_Display(TEXT("Unknown Class "), *obj->GetClass()->GetPathName());
+//
+// 		for (auto cls = obj->GetClass()->GetSuperClass(); cls && cls != AActor::StaticClass(); cls = cls->GetSuperClass())
+// 		{
+// 			PC_LOG_Display(TEXT("    - Super: "), *cls->GetPathName());
+// 		}
+//
+// 		for (TFieldIterator<FProperty> property(obj->GetClass()); property; ++property)
+// 		{
+// 			PC_LOG_Display(
+// 				TEXT("    - "),
+// 				*property->GetName(),
+// 				TEXT(" ("),
+// 				*property->GetCPPType(),
+// 				TEXT(" / "),
+// 				*property->GetClass()->GetName(),
+// 				TEXT(")")
+// 				);
+//
+// 			auto floatProperty = CastField<FFloatProperty>(*property);
+// 			if (floatProperty)
+// 			{
+// 				PC_LOG_Display(TEXT("        = "), floatProperty->GetPropertyValue_InContainer(obj));
+// 			}
+//
+// 			auto intProperty = CastField<FIntProperty>(*property);
+// 			if (intProperty)
+// 			{
+// 				PC_LOG_Display(TEXT("        = "), intProperty->GetPropertyValue_InContainer(obj));
+// 			}
+//
+// 			auto boolProperty = CastField<FBoolProperty>(*property);
+// 			if (boolProperty)
+// 			{
+// 				PC_LOG_Display(TEXT("        = "), boolProperty->GetPropertyValue_InContainer(obj) ? TEXT("true") : TEXT("false"));
+// 			}
+//
+// 			auto structProperty = CastField<FStructProperty>(*property);
+// 			if (structProperty && property->GetName() == TEXT("mFactoryTickFunction"))
+// 			{
+// 				auto factoryTick = structProperty->ContainerPtrToValuePtr<FFactoryTickFunction>(obj);
+// 				if (factoryTick)
+// 				{
+// 					PC_LOG_Display(TEXT("    - Tick Interval = "), factoryTick->TickInterval);
+// 				}
+// 			}
+//
+// 			auto strProperty = CastField<FStrProperty>(*property);
+// 			if (strProperty)
+// 			{
+// 				PC_LOG_Display(TEXT("        = "), *strProperty->GetPropertyValue_InContainer(obj));
+// 			}
+// 		}
+// 	}
+// }
 
 bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 {
@@ -604,7 +600,7 @@ void APowerCheckerLogic::addPowerChecker(APowerCheckerBuilding* powerChecker)
 	FScopeLock ScopeLock(&eclCritical);
 	allPowerCheckers.Add(powerChecker);
 
-	powerChecker->OnEndPlay.Add(removePowerCheckerDelegate);
+	powerChecker->OnEndPlay.AddDynamic(this, &APowerCheckerLogic::removePowerChecker);
 }
 
 void APowerCheckerLogic::removePowerChecker(AActor* actor, EEndPlayReason::Type reason)
@@ -612,7 +608,7 @@ void APowerCheckerLogic::removePowerChecker(AActor* actor, EEndPlayReason::Type 
 	FScopeLock ScopeLock(&eclCritical);
 	allPowerCheckers.Remove(Cast<APowerCheckerBuilding>(actor));
 
-	actor->OnEndPlay.Remove(removePowerCheckerDelegate);
+	actor->OnEndPlay.RemoveDynamic(this, &APowerCheckerLogic::removePowerChecker);
 }
 
 
@@ -632,5 +628,5 @@ void APowerCheckerLogic::setConfiguration(const FPowerChecker_ConfigStruct& in_c
 }
 
 #ifndef OPTIMIZE
-#pragma optimize( "", on )
+#pragma optimize("", on )
 #endif

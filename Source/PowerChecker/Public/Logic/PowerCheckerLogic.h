@@ -109,7 +109,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PowerCheckerLogic")
 	static void setConfiguration(const struct FPowerChecker_ConfigStruct& in_configuration);
 
-	static void dumpUnknownClass(UObject* obj);
+	// static void dumpUnknownClass(UObject* obj);
 	static bool inheritsFromClass(AActor* owner, const FString& className);
 
 	UFUNCTION()
@@ -126,7 +126,7 @@ public:
 	TSet<class APowerCheckerBuilding*> allPowerCheckers;
 
 	// FActorEndPlaySignature::FDelegate removeTeleporterDelegate;
-	FActorEndPlaySignature::FDelegate removePowerCheckerDelegate;
+	// FActorEndPlaySignature::FDelegate removePowerCheckerDelegate;
 
 	// virtual void addTeleporter(class AFGBuildable* actor);
 	virtual void addPowerChecker(class APowerCheckerBuilding* actor);

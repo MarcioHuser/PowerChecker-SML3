@@ -1,8 +1,8 @@
 ﻿#include "PowerCheckerBuilding.h"
 #include "PowerCheckerModule.h"
 #include "PowerCheckerRCO.h"
-#include "Util/Logging.h"
-#include "Util/Optimize.h"
+#include "Util/PCLogging.h"
+#include "Util/PCOptimize.h"
 
 #include "UObject/CoreNet.h"
 
@@ -12,7 +12,7 @@
 #include "Net/UnrealNetwork.h"
 
 #ifndef OPTIMIZE
-#pragma optimize( "", off )
+#pragma optimize("", off )
 #endif
 
 APowerCheckerBuilding::APowerCheckerBuilding()
@@ -364,5 +364,5 @@ int APowerCheckerBuilding::getCircuitGroupId()
 }
 
 #ifndef OPTIMIZE
-#pragma optimize( "", on )
+#pragma optimize("", on )
 #endif

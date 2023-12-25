@@ -1,12 +1,12 @@
 ﻿#include "PowerCheckerRCO.h"
 #include "PowerCheckerBuilding.h"
-#include "Util/Optimize.h"
+#include "Util/PCOptimize.h"
 
 #include "FGPlayerController.h"
 #include "Net/UnrealNetwork.h"
 
 #ifndef OPTIMIZE
-#pragma optimize( "", off )
+#pragma optimize("", off )
 #endif
 
 void UPowerCheckerRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -91,5 +91,5 @@ bool UPowerCheckerRCO::SetPendingPotential_Validate(class AFGBuildableFactory* f
 }
 
 #ifndef OPTIMIZE
-#pragma optimize( "", on )
+#pragma optimize("", on )
 #endif
