@@ -216,18 +216,11 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 
 				if (includePowerDetails)
 				{
-					if (auto locomotiveRecipe = locomotive->GetBuiltWithRecipe())
+					if (auto locomotiveClass = locomotive->GetBuiltWithDescriptor())
 					{
-						auto locomotiveProducts = UFGRecipe::GetProducts(locomotiveRecipe);
-						if (locomotiveProducts.Num() > 0)
-						{
-							if (auto locomotiveClass = locomotiveProducts[0].ItemClass)
-							{
-								consumerDetails[locomotiveClass]
-									[locomotive->GetPowerInfo()->GetMaximumTargetConsumption()]
-									[100].amount++;
-							}
-						}
+						consumerDetails[locomotiveClass]
+							[locomotive->GetPowerInfo()->GetMaximumTargetConsumption()]
+							[100].amount++;
 					}
 				}
 			}
