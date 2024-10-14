@@ -48,6 +48,7 @@ void FPowerCheckerModule::StartupModule()
 		void* ObjectInstance = GetMutableDefault<AFGBuildableFactory>();
 
 		SUBSCRIBE_METHOD_VIRTUAL_AFTER(AFGBuildableFactory::SetPendingPotential, ObjectInstance, setPendingPotentialCallback);
+		SUBSCRIBE_METHOD_VIRTUAL_AFTER(AFGBuildableFactory::SetPendingProductionBoost, ObjectInstance, setPendingProductionBoostCallback);
 	}
 
 	{
@@ -95,6 +96,45 @@ void FPowerCheckerModule::setPendingPotentialCallback(class AFGBuildableFactory*
 		*GetPathNameSafe(buildable),
 		TEXT(" to "),
 		potential
+		);
+
+	auto powerInfo = buildable->GetPowerInfo();
+	if (!powerInfo)
+	{
+		return;
+	}
+
+	auto powerCircuit = powerInfo->GetPowerCircuit();
+	if (!powerCircuit)
+	{
+		return;
+	}
+
+	auto circuitGroupId = powerCircuit->GetCircuitGroupID();
+
+	// Update all EfficiencyCheckerBuildings that connects to this building
+	FScopeLock ScopeLock(&APowerCheckerLogic::singleton->eclCritical);
+	for (auto powerChecker : APowerCheckerLogic::singleton->allPowerCheckers)
+	{
+		if (circuitGroupId == powerChecker->getCircuitGroupId())
+		{
+			powerChecker->TriggerUpdateValues(true);
+		}
+	}
+}
+
+void FPowerCheckerModule::setPendingProductionBoostCallback(class AFGBuildableFactory* buildable, float productionBoost)
+{
+	if (!APowerCheckerLogic::singleton)
+	{
+		return;
+	}
+	
+	PC_LOG_Display_Condition(
+		TEXT("SetPendingProductionBoost of building "),
+		*GetPathNameSafe(buildable),
+		TEXT(" to "),
+		productionBoost
 		);
 
 	auto powerInfo = buildable->GetPowerInfo();

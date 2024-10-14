@@ -24,6 +24,7 @@
 
 #include "Buildables/FGBuildableGenerator.h"
 #include "Buildables/FGBuildablePowerStorage.h"
+#include "Kismet/GameplayStatics.h"
 
 #ifndef OPTIMIZE
 #pragma optimize("", off )
@@ -285,8 +286,8 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 						break;
 
 					default:
-						includeDetails &= (includePaused || generator && !generator->IsProductionPaused()) &&
-							(includeOutOfFuel || generator && generator->CanStartPowerProduction() || powerInfo->GetBaseProduction());
+						includeDetails &= (includePaused || (generator && !generator->IsProductionPaused())) &&
+							(includeOutOfFuel || (generator && generator->CanStartPowerProduction()) || powerInfo->GetBaseProduction());
 						break;
 					}
 				}
@@ -322,7 +323,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 			}
 			else if (factory || powerInfo->GetTargetConsumption() || powerInfo->GetMaximumTargetConsumption())
 			{
-				if (!factory || factory->IsConfigured() && factory->GetProducingPowerConsumption())
+				if (!factory || (factory->IsConfigured() && factory->GetProducingPowerConsumption()))
 				{
 					if (IS_PC_LOG_LEVEL(ELogVerbosity::Log))
 					{
@@ -350,7 +351,7 @@ void APowerCheckerLogic::GetMaximumPotentialWithDetails
 						totalMaximumPotential += maxComsumption;
 					}
 
-					auto includeDetails = (includePaused || !factory || factory && !factory->IsProductionPaused()) && buildDescriptor && includePowerDetails;
+					auto includeDetails = (includePaused || !factory || (factory && !factory->IsProductionPaused())) && buildDescriptor && includePowerDetails;
 
 					if (includeDetails)
 					{

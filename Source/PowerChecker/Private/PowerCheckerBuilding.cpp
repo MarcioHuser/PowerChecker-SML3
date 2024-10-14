@@ -141,43 +141,46 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 	TArray<FPowerDetail> powerStorageDetails;
 	TArray<FPowerDetail> consumerDetails;
 
-	if (updateMaximumPotential)
+	if (withDetails)
 	{
-		APowerCheckerLogic::GetMaximumPotentialWithDetails(
-			powerConnection,
-			calculatedMaximumPotential,
-			includePaused,
-			includeOutOfFuel,
-			withDetails,
-			generatorDetails,
-			powerStorageDetails,
-			consumerDetails,
-			filterType
-			);
-	}
-	else if (filterType != PowerCheckerFilterType::Any)
-	{
-		float _dummyValue;
-		APowerCheckerLogic::GetMaximumPotentialWithDetails(
-			powerConnection,
-			_dummyValue,
-			includePaused,
-			includeOutOfFuel,
-			withDetails,
-			generatorDetails,
-			powerStorageDetails,
-			consumerDetails,
-			filterType
-			);
+		if (updateMaximumPotential)
+		{
+			APowerCheckerLogic::GetMaximumPotentialWithDetails(
+				powerConnection,
+				calculatedMaximumPotential,
+				includePaused,
+				includeOutOfFuel,
+				withDetails,
+				generatorDetails,
+				powerStorageDetails,
+				consumerDetails,
+				filterType
+				);
+		}
+		else if (filterType != PowerCheckerFilterType::Any)
+		{
+			float _dummyValue;
+			APowerCheckerLogic::GetMaximumPotentialWithDetails(
+				powerConnection,
+				_dummyValue,
+				includePaused,
+				includeOutOfFuel,
+				withDetails,
+				generatorDetails,
+				powerStorageDetails,
+				consumerDetails,
+				filterType
+				);
+		}
 	}
 
-	isOverflow = circuitStats.PowerProductionCapacity > 0 && circuitStats.PowerProductionCapacity < calculatedMaximumPotential;
+	isOverflow = circuitStats.PowerProductionCapacity > 0 && circuitStats.PowerProductionCapacity < circuitStats.MaximumPowerConsumption;
 
-	if (circuitStats.PowerProductionCapacity == 0 || circuitStats.PowerProductionCapacity < calculatedMaximumPotential)
+	if (circuitStats.PowerProductionCapacity == 0 || circuitStats.PowerProductionCapacity < circuitStats.MaximumPowerConsumption)
 	{
 		productionStatus = EProductionStatus::IS_ERROR;
 	}
-	else if (circuitStats.PowerProductionCapacity - APowerCheckerLogic::configuration.spareLimit < calculatedMaximumPotential)
+	else if (circuitStats.PowerProductionCapacity - APowerCheckerLogic::configuration.spareLimit < circuitStats.MaximumPowerConsumption)
 	{
 		productionStatus = EProductionStatus::IS_STANDBY;
 	}
@@ -186,14 +189,14 @@ void APowerCheckerBuilding::Server_TriggerUpdateValues(bool updateMaximumPotenti
 		productionStatus = EProductionStatus::IS_PRODUCING;
 	}
 
-	// PC_LOG_Debug(getTagName(), TEXT("Built-in maximum consumption: "), circuitStats.MaximumPowerConsumption)
-	// PC_LOG_Debug(getTagName(), TEXT("Calculated maximum: "), calculatedMaximumPotential)
+	// PC_LOG_Display_Condition(getTagName(), TEXT("Built-in maximum consumption: "), circuitStats.MaximumPowerConsumption)
+	// PC_LOG_Display_Condition(getTagName(), TEXT("Calculated maximum: "), calculatedMaximumPotential)
 
 	FSimplePowerCircuitStats simpleCircuitStats;
 	simpleCircuitStats.PowerProductionCapacity = circuitStats.PowerProductionCapacity;
 	simpleCircuitStats.PowerConsumed = circuitStats.PowerConsumed;
 	simpleCircuitStats.MaximumPowerConsumption = circuitStats.MaximumPowerConsumption;
-	
+
 	if (withDetails)
 	{
 		UpdateValuesWithDetails(simpleCircuitStats, batterySumPowerStore, generatorDetails, powerStorageDetails, consumerDetails);

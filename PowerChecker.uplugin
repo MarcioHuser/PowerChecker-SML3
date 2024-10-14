@@ -1,8 +1,9 @@
 {
   "FileVersion": 3,
   "Version": 2,
-  "VersionName": "2.3.2",
-  "SemVersion": "2.3.2",
+  "VersionName": "2.4.1",
+  "SemVersion": "2.4.1",
+  "GameVersion": ">=368883",
   "FriendlyName": "Power Checker",
   "Description": "Check if your fuses can blow!",
   "Category": "Modding",
@@ -24,13 +25,18 @@
   ],
   "Plugins": [
     {
+      "Name": "AbstractInstance",
+      "BasePlugin": true,
+      "Enabled": true
+    },
+    {
       "Name": "SML",
-      "SemVersion": "^3.7.0",
+      "SemVersion": "^3.8.0",
       "Enabled": true
     },
     {
       "Name": "MarcioCommonLibs",
-      "SemVersion": "^1.2.5",
+      "SemVersion": "^1.3.0",
       "Enabled": true
     }
   ]

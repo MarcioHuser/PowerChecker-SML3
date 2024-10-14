@@ -79,7 +79,7 @@ void UPowerCheckerRCO::SetPendingPotential_Implementation(class AFGBuildableFact
 {
 	if (factory->HasAuthority())
 	{
-		pendingPotential = FMath::Clamp(pendingPotential, factory->GetMinPotential(), factory->GetCurrentMaxPotential());
+		pendingPotential = FMath::Clamp(pendingPotential, factory->GetCurrentMinPotential(), factory->GetCurrentMaxPotential());
 		
 		factory->SetPendingPotential(pendingPotential);
 	}
