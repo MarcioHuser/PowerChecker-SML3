@@ -1,8 +1,8 @@
 {
   "FileVersion": 3,
   "Version": 2,
-  "VersionName": "2.4.1",
-  "SemVersion": "2.4.1",
+  "VersionName": "2.4.2",
+  "SemVersion": "2.4.2",
   "GameVersion": ">=368883",
   "FriendlyName": "Power Checker",
   "Description": "Check if your fuses can blow!",
@@ -36,7 +36,7 @@
     },
     {
       "Name": "MarcioCommonLibs",
-      "SemVersion": "^1.3.0",
+      "SemVersion": "^1.3.1",
       "Enabled": true
     }
   ]
