@@ -3,7 +3,7 @@
   "Version": 2,
   "VersionName": "2.4.2",
   "SemVersion": "2.4.2",
-  "GameVersion": ">=368883",
+  "GameVersion": ">=372858",
   "FriendlyName": "Power Checker",
   "Description": "Check if your fuses can blow!",
   "Category": "Modding",
