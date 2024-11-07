@@ -74,6 +74,11 @@ void APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed(AFGBuildable
 	IsValidBuildable(buildable);
 }
 
+void APowerCheckerLogic::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Terminate();
+}
+
 void APowerCheckerLogic::Terminate()
 {
 	FScopeLock ScopeLock(&eclCritical);

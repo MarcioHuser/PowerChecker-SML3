@@ -64,6 +64,8 @@ class POWERCHECKER_API APowerCheckerLogic : public AActor
 public:
 	APowerCheckerLogic();
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	UFUNCTION(BlueprintCallable, Category="PowerCheckerLogic")
 	static void GetMaximumPotential
 	(
