@@ -115,7 +115,10 @@ public:
 	static bool inheritsFromClass(AActor* owner, const FString& className);
 
 	UFUNCTION()
-	virtual void OnFGBuildableSubsystemBuildableConstructed(AFGBuildable* buildable);
+	virtual void OnFGBuildableSubsystemBuildableConstructed(class AFGBuildable* buildable);
+
+	UFUNCTION()
+	virtual void OnFGBuildableSubsystemBuildableRemoved(class AFGBuildable* buildable);
 
 	static APowerCheckerLogic* singleton;
 	static FPowerChecker_ConfigStruct configuration;
@@ -137,5 +140,5 @@ public:
 	// virtual void removeTeleporter(AActor* actor, EEndPlayReason::Type reason);
 
 	UFUNCTION()
-	virtual void removePowerChecker(AActor* actor, EEndPlayReason::Type reason);
+	virtual void removePowerChecker(AActor* actor/*, EEndPlayReason::Type reason*/);
 };

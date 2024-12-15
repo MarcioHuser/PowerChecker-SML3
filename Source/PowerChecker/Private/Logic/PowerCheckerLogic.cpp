@@ -48,7 +48,9 @@ void APowerCheckerLogic::Initialize(TSubclassOf<UFGItemDescriptor> in_dropPodStu
 
 	if (subsystem)
 	{
-		subsystem->BuildableConstructedGlobalDelegate.AddDynamic(this, &APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed);
+		subsystem->mBuildableAddedDelegate.AddDynamic(this, &APowerCheckerLogic::OnFGBuildableSubsystemBuildableConstructed);
+		subsystem->mBuildableRemovedDelegate.AddDynamic(this, &APowerCheckerLogic::OnFGBuildableSubsystemBuildableRemoved);
+
 
 		TArray<AActor*> allBuildables;
 		UGameplayStatics::GetAllActorsOfClass(subsystem->GetWorld(), AFGBuildable::StaticClass(), allBuildables);
@@ -578,6 +580,19 @@ bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 	return true;
 }
 
+void APowerCheckerLogic::OnFGBuildableSubsystemBuildableRemoved(AFGBuildable* buildable)
+{
+	if (!buildable)
+	{
+		return;
+	}
+
+	if (auto powerChecker = Cast<APowerCheckerBuilding>(buildable))
+	{
+		removePowerChecker(powerChecker);
+	}
+}
+
 // void APowerCheckerLogic::addTeleporter(AFGBuildable* teleporter)
 // {
 // 	FScopeLock ScopeLock(&eclCritical);
@@ -597,17 +612,21 @@ bool APowerCheckerLogic::IsValidBuildable(AFGBuildable* newBuildable)
 void APowerCheckerLogic::addPowerChecker(APowerCheckerBuilding* powerChecker)
 {
 	FScopeLock ScopeLock(&eclCritical);
-	allPowerCheckers.Add(powerChecker);
 
-	powerChecker->OnEndPlay.AddDynamic(this, &APowerCheckerLogic::removePowerChecker);
+	if (!allPowerCheckers.Contains(powerChecker))
+	{
+		allPowerCheckers.Add(powerChecker);
+
+		//powerChecker->OnEndPlay.AddDynamic(this, &APowerCheckerLogic::removePowerChecker);
+	}
 }
 
-void APowerCheckerLogic::removePowerChecker(AActor* actor, EEndPlayReason::Type reason)
+void APowerCheckerLogic::removePowerChecker(AActor* actor/*, EEndPlayReason::Type reason*/)
 {
 	FScopeLock ScopeLock(&eclCritical);
 	allPowerCheckers.Remove(Cast<APowerCheckerBuilding>(actor));
 
-	actor->OnEndPlay.RemoveDynamic(this, &APowerCheckerLogic::removePowerChecker);
+	//actor->OnEndPlay.RemoveDynamic(this, &APowerCheckerLogic::removePowerChecker);
 }
 
 
