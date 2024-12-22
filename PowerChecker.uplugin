@@ -3,7 +3,7 @@
   "Version": 2,
   "VersionName": "2.4.7",
   "SemVersion": "2.4.7",
-  "GameVersion": ">=382498",
+  "GameVersion": ">=385279",
   "FriendlyName": "Power Checker",
   "Description": "Check if your fuses can blow!",
   "Category": "Modding",
@@ -31,7 +31,7 @@
     },
     {
       "Name": "SML",
-      "SemVersion": "^3.8.0",
+      "SemVersion": "^3.9.0",
       "Enabled": true
     },
     {
