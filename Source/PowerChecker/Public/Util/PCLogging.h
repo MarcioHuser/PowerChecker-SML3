@@ -7,6 +7,39 @@
 class CommaLog
 {
 public:
+	inline CommaLog&
+	operator,(const FString& value)
+	{
+		for (TCHAR ch : value)
+		{
+			wos << static_cast<wchar_t>(ch);
+		}
+
+		return *this;
+	}
+
+	inline CommaLog&
+	operator,(const FText& value)
+	{
+		for (TCHAR ch : value.ToString())
+		{
+			wos << static_cast<wchar_t>(ch);
+		}
+
+		return *this;
+	}
+
+	inline CommaLog&
+	operator,(const TCHAR* value)
+	{
+		for (size_t x = 0; value[x]; x++)
+		{
+			wos << static_cast<wchar_t>(value[x]);
+		}
+
+		return *this;
+	}
+
 	template <typename T>
 	inline CommaLog&
 	operator,(const T& value)
@@ -15,23 +48,7 @@ public:
 
 		return *this;
 	}
-
-	inline CommaLog&
-	operator,(const FString& value)
-	{
-		wos << *value;
-
-		return *this;
-	}
-
-	inline CommaLog&
-	operator,(const FText& value)
-	{
-		wos << *value.ToString();
-
-		return *this;
-	}
-
+	
 	std::wostringstream wos;
 };
 
