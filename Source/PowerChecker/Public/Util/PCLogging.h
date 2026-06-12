@@ -8,6 +8,17 @@ class CommaLog
 {
 public:
 	inline CommaLog&
+	operator,(const TCHAR* value)
+	{
+		for (size_t x = 0; value[x]; x++)
+		{
+			wos << static_cast<wchar_t>(value[x]);
+		}
+
+		return *this;
+	}
+
+	inline CommaLog&
 	operator,(const FString& value)
 	{
 		for (TCHAR ch : value)
@@ -29,17 +40,6 @@ public:
 		return *this;
 	}
 
-	inline CommaLog&
-	operator,(const TCHAR* value)
-	{
-		for (size_t x = 0; value[x]; x++)
-		{
-			wos << static_cast<wchar_t>(value[x]);
-		}
-
-		return *this;
-	}
-
 	template <typename T>
 	inline CommaLog&
 	operator,(const T& value)
@@ -54,12 +54,22 @@ public:
 
 DECLARE_LOG_CATEGORY_EXTERN(LogPowerChecker, Log, All)
 
+#if PLATFORM_LINUX
+#define PC_LOG_Verbosity(verbosity, first, ...) \
+	{ \
+		CommaLog l; \
+		l, first, ##__VA_ARGS__; \
+		const auto AnsiStr = StringCast<ANSICHAR>(l.wos.str().c_str()); \
+		UE_LOG(LogPowerChecker, verbosity, TEXT("%hs"), AnsiStr.Get()) \
+	}
+#else
 #define PC_LOG_Verbosity(verbosity, first, ...) \
 	{ \
 		CommaLog l; \
 		l, first, ##__VA_ARGS__; \
 		UE_LOG(LogPowerChecker, verbosity, TEXT("%s"), l.wos.str().c_str()) \
 	}
+#endif
 
 #define PC_LOG_Log(first, ...) PC_LOG_Verbosity(Log, first, ##__VA_ARGS__)
 #define PC_LOG_Display(first, ...) PC_LOG_Verbosity(Display, first, ##__VA_ARGS__)
