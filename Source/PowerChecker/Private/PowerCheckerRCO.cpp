@@ -25,7 +25,7 @@ UPowerCheckerRCO* UPowerCheckerRCO::getRCO(UWorld* world)
 
 void UPowerCheckerRCO::SetIncludePaused_Implementation(APowerCheckerBuilding* powerChecker, bool includePaused)
 {
-	if (powerChecker->HasAuthority())
+	if (IsValid(powerChecker) && powerChecker->HasAuthority())
 	{
 		powerChecker->Server_SetIncludePaused(includePaused);
 	}
@@ -38,7 +38,7 @@ bool UPowerCheckerRCO::SetIncludePaused_Validate(APowerCheckerBuilding* powerChe
 
 void UPowerCheckerRCO::SetIncludeOutOfFuel_Implementation(APowerCheckerBuilding* powerChecker, bool includeOutOfFuel)
 {
-	if (powerChecker->HasAuthority())
+	if (IsValid(powerChecker) && powerChecker->HasAuthority())
 	{
 		powerChecker->Server_SetIncludeOutOfFuel(includeOutOfFuel);
 	}
@@ -51,7 +51,7 @@ bool UPowerCheckerRCO::SetIncludeOutOfFuel_Validate(APowerCheckerBuilding* power
 
 void UPowerCheckerRCO::TriggerUpdateValues_Implementation(APowerCheckerBuilding* powerChecker, bool updateMaximumPotential, bool withDetails, PowerCheckerFilterType filterType)
 {
-	if (powerChecker->HasAuthority())
+	if (IsValid(powerChecker) && powerChecker->HasAuthority())
 	{
 		powerChecker->Server_TriggerUpdateValues(updateMaximumPotential, withDetails, filterType);
 	}
@@ -64,7 +64,7 @@ bool UPowerCheckerRCO::TriggerUpdateValues_Validate(APowerCheckerBuilding* power
 
 void UPowerCheckerRCO::SetProductionPaused_Implementation(class AFGBuildableFactory* factory, bool isProductionPaused)
 {
-	if (factory->HasAuthority())
+	if (IsValid(factory) && factory->HasAuthority())
 	{
 		factory->SetIsProductionPaused(isProductionPaused);
 	}
@@ -77,7 +77,7 @@ bool UPowerCheckerRCO::SetProductionPaused_Validate(class AFGBuildableFactory* f
 
 void UPowerCheckerRCO::SetPendingPotential_Implementation(class AFGBuildableFactory* factory, float pendingPotential)
 {
-	if (factory->HasAuthority())
+	if (IsValid(factory) && factory->HasAuthority())
 	{
 		pendingPotential = FMath::Clamp(pendingPotential, factory->GetCurrentMinPotential(), factory->GetCurrentMaxPotential());
 		
