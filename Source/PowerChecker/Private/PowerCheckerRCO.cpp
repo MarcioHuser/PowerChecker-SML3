@@ -33,7 +33,7 @@ void UPowerCheckerRCO::SetIncludePaused_Implementation(APowerCheckerBuilding* po
 
 bool UPowerCheckerRCO::SetIncludePaused_Validate(APowerCheckerBuilding* powerChecker, bool includePaused)
 {
-	return true;
+	return IsValid(powerChecker);
 }
 
 void UPowerCheckerRCO::SetIncludeOutOfFuel_Implementation(APowerCheckerBuilding* powerChecker, bool includeOutOfFuel)
@@ -46,7 +46,7 @@ void UPowerCheckerRCO::SetIncludeOutOfFuel_Implementation(APowerCheckerBuilding*
 
 bool UPowerCheckerRCO::SetIncludeOutOfFuel_Validate(APowerCheckerBuilding* powerChecker, bool includeOutOfFuel)
 {
-	return true;
+	return IsValid(powerChecker);
 }
 
 void UPowerCheckerRCO::TriggerUpdateValues_Implementation(APowerCheckerBuilding* powerChecker, bool updateMaximumPotential, bool withDetails, PowerCheckerFilterType filterType)
@@ -59,7 +59,7 @@ void UPowerCheckerRCO::TriggerUpdateValues_Implementation(APowerCheckerBuilding*
 
 bool UPowerCheckerRCO::TriggerUpdateValues_Validate(APowerCheckerBuilding* powerChecker, bool updateMaximumPotential, bool withDetails, PowerCheckerFilterType filterType)
 {
-	return true;
+	return IsValid(powerChecker);
 }
 
 void UPowerCheckerRCO::SetProductionPaused_Implementation(class AFGBuildableFactory* factory, bool isProductionPaused)
@@ -72,7 +72,7 @@ void UPowerCheckerRCO::SetProductionPaused_Implementation(class AFGBuildableFact
 
 bool UPowerCheckerRCO::SetProductionPaused_Validate(class AFGBuildableFactory* factory, bool productionIsPaused)
 {
-	return true;
+	return IsValid(factory);
 }
 
 void UPowerCheckerRCO::SetPendingPotential_Implementation(class AFGBuildableFactory* factory, float pendingPotential)
@@ -87,7 +87,7 @@ void UPowerCheckerRCO::SetPendingPotential_Implementation(class AFGBuildableFact
 
 bool UPowerCheckerRCO::SetPendingPotential_Validate(class AFGBuildableFactory* factory, float pendingPotential)
 {
-	return true;
+	return IsValid(factory);
 }
 
 #ifndef OPTIMIZE
